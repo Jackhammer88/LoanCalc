@@ -1,58 +1,83 @@
-﻿/* HTML styles for the splash screen */
-.avalonia-splash {
+/* Заставка, которую видно, пока грузится рантайм WASM. */
+.app-splash {
     position: absolute;
-    height: 100%;
-    width: 100%;
-    background: white;
-    font-family: 'Outfit', sans-serif;
-    justify-content: center;
-    align-items: center;
+    inset: 0;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: #ffffff;
+    color: #2b3a8f;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
     pointer-events: none;
 }
 
-/* Light theme styles */
-@media (prefers-color-scheme: light) {
-    .avalonia-splash {
-        background: white;
-    }
-
-    .avalonia-splash h2 {
-        color: #1b2a4e;
-    }
-
-    .avalonia-splash a {
-        color: #0D6EFD;
-    }
-}
-
 @media (prefers-color-scheme: dark) {
-    .avalonia-splash {
-        background: #1b2a4e;
-    }
-
-    .avalonia-splash h2 {
-        color: white;
-    }
-
-    .avalonia-splash a {
-        color: white;
+    .app-splash {
+        background: #14173a;
+        color: #dfe4ff;
     }
 }
 
-.avalonia-splash h2 {
-    font-weight: 400;
-    font-size: 1.5rem;
+.app-splash__icon {
+    /* drop-shadow, а не box-shadow: тень должна повторять скруглённый значок,
+       а не квадратную рамку элемента. */
+    filter: drop-shadow(0 10px 22px rgba(43, 58, 143, 0.35));
+    animation: app-splash-appear 320ms ease-out both;
 }
 
-.avalonia-splash a {
-    text-decoration: none;
-    font-size: 2.5rem;
-    display: block;   
+.app-splash__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    animation: app-splash-appear 320ms ease-out 80ms both;
 }
 
-.avalonia-splash.splash-close {
-    transition: opacity 200ms, display 200ms;
-    display: none;
-    opacity: 0;
+.app-splash__title {
+    font-size: 1.65rem;
+    font-weight: 600;
+}
+
+.app-splash__subtitle {
+    font-size: 0.95rem;
+    opacity: 0.6;
+}
+
+.app-splash__bar {
+    width: 168px;
+    height: 3px;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: 0.18;
+    overflow: hidden;
+}
+
+.app-splash__bar span {
+    display: block;
+    width: 40%;
+    height: 100%;
+    border-radius: 2px;
+    background: currentColor;
+    animation: app-splash-slide 1.15s ease-in-out infinite;
+}
+
+@keyframes app-splash-appear {
+    from { opacity: 0; transform: scale(0.94); }
+    to   { opacity: 1; transform: none; }
+}
+
+@keyframes app-splash-slide {
+    from { transform: translateX(-110%); }
+    to   { transform: translateX(310%); }
+}
+
+/* Анимация — украшение: если система просит покоя, показываем статичную полосу. */
+@media (prefers-reduced-motion: reduce) {
+    .app-splash__icon,
+    .app-splash__text,
+    .app-splash__bar span {
+        animation: none;
+    }
 }
